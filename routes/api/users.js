@@ -1,10 +1,16 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const { check, validationResult, body } = require('express-validator');
 const router = express.Router();
 const isEmpty = require('../../utils/isEmpty');
-const user = require('../../models/User');
 const User = require('../../models/User');
+const config = require('config');
+
+// @route POST api/users/
+// @desc create a user
+// @access PUBLIC
+
 router.post(
   '/',
   [
@@ -76,6 +82,18 @@ router.push(
       }
 
       //validation! challenge create the token and return to the user
+      // information => encoder + key => token => decoder + key => information
+
+      User.findByIdAndUpdate(user.id, { lastLogin: Date.now() });
+
+      const payload = {
+        id: user.id,
+        email: user.email,
+      };
+
+      const token = jwt.sign(payload, config.secretOrKey, {});
+
+      return res.json(token);
     } catch (err) {
       console.error(error);
       res.status(500).json(error);
