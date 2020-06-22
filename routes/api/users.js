@@ -58,7 +58,7 @@ router.post(
 // @desc login a user
 // @access PUBLIC
 
-router.push(
+router.PUT(
   '/',
   [
     check('email', 'Email Required').not().isEmpty(),
