@@ -4,8 +4,9 @@ const Schema = mongoose.Schema;
 const profileSchema = new Schema(
   {
     user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'user',
+      type: Schema.Types.ObjectId,
+      ref: 'users',
+      unique: true,
     },
     firstName: {
       type: String,
@@ -15,38 +16,47 @@ const profileSchema = new Schema(
       type: String,
       required: true,
     },
+    name: {
+      type: String,
+      required: true,
+    },
     occupation: {
       type: String,
     },
     educationLevel: {
       type: String,
+      enum: [
+        'Some High School',
+        'High School',
+        'GED',
+        'College',
+        'Some College',
+        'College',
+        'Masters',
+        'PHD',
+        'Technical School',
+        'BootCamp',
+      ],
+      required: true,
     },
     resourceId: {
-      type: [String],
+      type: [Schema.Types.ObjectId],
+      ref: 'resources',
     },
-    certifications: {
-      type: [String],
+    certifications: [String],
+    location: {
+      city: String,
+      state: String,
     },
-    city: {
-      type: String,
+    social: {
+      githubUrl: String,
+      twitterUrl: String,
+      youtubeUrl: String,
     },
-    state: {
-      type: String,
-    },
-    githubUrl: {
-      type: String,
-    },
-    twitterUrl: {
-      type: String,
-    },
-    youtubeUrl: {
-      type: String,
-    },
-    summary: {
-      type: String,
-    },
+    summary: String,
+    Avatar: String,
   },
   { timestamps: {} }
 );
 
-module.exports = Profile = mongoose.model('profile', profileSchema);
+module.exports = Profile = mongoose.model('profiles', profileSchema);
