@@ -1,7 +1,6 @@
 const express = require('express');
-const config = require('config');
 const router = express.Router();
-const { check, validationResult } = require('express-validator/check');
+const { check, validationResult } = require('express-validator');
 const Profile = require('../../models/Profile');
 const auth = require('../../middlewares/auth');
 
@@ -49,11 +48,14 @@ router.post(
       if (summary) profileFields.summary = summary;
 
       profileFields.social = {};
-      if (social.githubUrl) profileFields.social.githubUrl = social.githubUrl;
+      if (social) {
+        if (social.githubUrl) profileFields.social.githubUrl = social.githubUrl;
       if (social.twitterUrl)
         profileFields.social.twitterUrl = social.twitterUrl;
       if (social.youtubeUrl)
         profileFields.social.youtubeUrl = social.youtubeUrl;
+      }
+      
 
       const profile = await Profile.create(profileFields);
       res.json(profile);

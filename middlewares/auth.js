@@ -15,7 +15,7 @@ const auth = (req, res, next) => {
     return res.status(401).json({ message: 'Invalid Authorization' });
   }
   try {
-    const decoded = jwt.verify(token, config.secretOrKey);
+    const decoded = jwt.verify(token, config.get(secretOrKey));
     req.user = decoded;
     next();
   } catch (err) {
