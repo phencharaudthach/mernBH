@@ -86,13 +86,18 @@ res.json(profile);
 
 router.get('/', auth, async (req, res) => {
   try {
-    const profiles = await Profile.find( {user: {$ne: req.user.id}},{location: 0}).populate('user', ['name']);
+    const currentProfile = await Profile.findOne({ user: req.user.id });
+    console.log(currentProfile);
+    const profiles = await Profile.find(
+      { _id: { $ne: currentProfile } },
+      { experience: 0 }
+    ).populate('user', ['name']);
     res.json(profiles);
   } catch (err) {
     console.error(err.message);
-
     res.status(500).send('Server Error');
   }
-})
+});
+
 module.exports = router;
 
