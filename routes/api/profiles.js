@@ -65,6 +65,34 @@ router.post(
 );
 
 // get /self return logged in profile data. authenticated route
+
+router.get('/self', auth, async (req, res) => { 
+try {
+  const profile = await Profile.findOne({
+    user: req.user.id,
+  }).populate('user', ['name']);
+
+  if (!profile){
+    return res.status(400).json({message: 'There is no profile for this user'})
+  }
+res.json(profile);
+} catch (error) {
+  console.error(err.message)
+  res.status(500).send('Server Error')
+}
+});
+
 // get / return all profiles - hacker challenge one -> exclude logged in user from results. Hint: query hacker challenge 2 -> excluded location data. Hint: projections
 
+router.get('/', auth, async (req, res) => {
+  try {
+    const profiles = await Profile.find( {user: {$ne: req.user.id}},{location: 0}).populate('user', ['name']);
+    res.json(profiles);
+  } catch (err) {
+    console.error(err.message);
+
+    res.status(500).send('Server Error');
+  }
+})
 module.exports = router;
+
