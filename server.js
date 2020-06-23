@@ -2,23 +2,28 @@
 //extra use cors, accept json, have port check PORT envirnment variable first
 const express = require('express');
 const app = express();
-const cors = require("cors");
-const config = require("./config");
+const cors = require('cors');
+const config = require('./config');
 const mongoose = require('mongoose');
 
 app.use(cors());
 app.use(express.json());
 
 const users = require('./routes/api/users');
+const profiles = require('./routes/api/profiles');
 
 app.use('/api/users', users);
+app.use('/api/profiles', profiles);
 
-mongoose.connect(config.mongoURI, {
+mongoose.connect(
+  config.mongoURI,
+  {
     useUnifiedTopology: true,
     useNewUrlParser: true,
     useCreateIndex: true,
-},
-() => console.log("connected to database"));
+  },
+  () => console.log('connected to database')
+);
 
 const port = process.env.PORT || 5000;
 
