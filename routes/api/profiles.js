@@ -14,8 +14,8 @@ router.post(
     check('firstName', 'first name is required').not().isEmpty(),
     check('lastName', 'Last name is required').not().isEmpty(),
     check('educationLevel', 'Education level is required').not().isEmpty(),
-    check('social.githubUrl', "Invalid URL".optional().isURL()),
-    check('social.twitterUrl', "Invalid URL".optional().isURL()),
+    check('social.githubUrl', 'Invalid URL'.optional().isURL()),
+    check('social.twitterUrl', 'Invalid URL'.optional().isURL()),
   ],
   async (req, res) => {
     console.log(req.body);
@@ -45,7 +45,7 @@ router.post(
         educationLevel,
       };
 
-      profileFields.name =  `${profileFields.firstName} ${profileFields.lastName}`
+      profileFields.name = `${profileFields.firstName} ${profileFields.lastName}`;
 
       profileFields.user = userId;
       if (occupation) profileFields.occupation = occupation;
@@ -56,10 +56,11 @@ router.post(
       profileFields.social = {};
       if (social) {
         if (social.githubUrl) profileFields.social.githubUrl = social.githubUrl;
-        if (social.twitterUrl) profileFields.social.twitterUrl = social.twitterUrl;
-        if (social.youtubeUrl) profileFields.social.youtubeUrl = social.youtubeUrl;
+        if (social.twitterUrl)
+          profileFields.social.twitterUrl = social.twitterUrl;
+        if (social.youtubeUrl)
+          profileFields.social.youtubeUrl = social.youtubeUrl;
       }
-      
 
       const profile = await Profile.create(profileFields);
       res.json(profile);
@@ -72,20 +73,22 @@ router.post(
 
 // get /self return logged in profile data. authenticated route
 
-router.get('/self', auth, async (req, res) => { 
-try {
-  const profile = await Profile.findOne({
-    user: req.user.id,
-  }).populate('user', ['name']);
+router.get('/self', auth, async (req, res) => {
+  try {
+    const profile = await Profile.findOne({
+      user: req.user.id,
+    }).populate('user', ['name']);
 
-  if (!profile){
-    return res.status(400).json({message: 'There is no profile for this user'})
+    if (!profile) {
+      return res
+        .status(400)
+        .json({ message: 'There is no profile for this user' });
+    }
+    res.json(profile);
+  } catch (error) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
   }
-res.json(profile);
-} catch (error) {
-  console.error(err.message)
-  res.status(500).send('Server Error')
-}
 });
 
 // get / return all profiles - hacker challenge one -> exclude logged in user from results. Hint: query hacker challenge 2 -> excluded location data. Hint: projections
@@ -105,5 +108,48 @@ router.get('/', auth, async (req, res) => {
   }
 });
 
-module.exports = router;
+route.put(
+  '/:id',
+  auth,
+  [
+    check('firstName', 'first name is required').not().isEmpty(),
+    check('lastName', 'Last name is required').not().isEmpty(),
+    check('educationLevel', 'Education level is required').not().isEmpty(),
+    check('social.githubUrl', 'Invalid URL'.optional().isURL()),
+    check('social.twitterUrl', 'Invalid URL'.optional().isURL()),
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    try {
+      const postData = { ...req.body };
+      const profile = await Profile.findOneAndUpdate(
+        {
+          profile: profile._id,
+        },
+        profileData,
+        { new: true }
+      );
+      if (!profile) {
+        res.status(403).json({ msg: ' Unable To Update' });
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).json('Server Error');
+    }
+  }
+);
 
+route.delete('/', auth, async (req, res) => {
+  try {
+    await Profile.findOneAndRemove({ user: req.user.id });
+    res.json({ msg: 'Profile has been updated' });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+module.exports = router;
