@@ -145,7 +145,7 @@ route.put(
 route.delete('/', auth, async (req, res) => {
   try {
     await Profile.findOneAndRemove({ user: req.user.id });
-    res.json({ msg: 'Profile has been updated' });
+    res.json({ msg: 'Profile was removed' });
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
