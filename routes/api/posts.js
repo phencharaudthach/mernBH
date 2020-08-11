@@ -132,4 +132,24 @@ router.put('/:id', auth, [...postValidator], async (req, res) => {
   }
 });
 
+router.put("/:postID/like", auth, async (req, res) => {
+try {
+  if(req.body.like){
+    // add the user id to likes
+    const post = await Post.findByIdAndUpdate();
+  } else {
+    // remove the specific userid from likes
+    const post = await Post.findByIdAndUpdate();
+  }
+  return res.json(post.likes.length);
+
+} catch (error) {
+  console.error(error);
+ return res.status(500).json(error)
+}
+})
+
+
+
+
 module.exports = router;

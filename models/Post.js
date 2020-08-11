@@ -57,9 +57,9 @@ const postSchema = new Schema({
   timeToComplete: Number,
   cost: { type: Number, required: true },
   comments: { type: [commentSchema], default: [] },
-  rating: {
-    type: [{ user: Schema.Types.ObjectId, score: Number }],
-    default: [],
+  likes: {
+    type: { type: [Schema.Types.ObjectId],
+    default: []},
   },
 });
 
