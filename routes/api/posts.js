@@ -153,7 +153,34 @@ try {
 }
 })
 
+// *** NonLocking
+router.delete("/:postID/:commentID", auth, async (req, res)=> {
+try {
+  const post = await Post.findById(req.params.postID);
+  if(!post) {
+    return res.status(404).json({msg: "Post not found"});
+  }
+  const comment = post.comments.find(
+    (comment) => comment.id === req.params.commentID
+  );
 
+  if (!comment) {
+    return res.status(404).json({msg: "Comment not found"})
+  }
 
+  const profile = await Profile.findOne({user: req.user.id});
+
+  if (profile.id !== post.comments[index].profile) {
+    return res.status(401).json({msg: "Unauthorized"});
+  }
+
+  const updatedPost = await Post.findByIdAndUpdate(req.params.postID, {
+    $pull: {comments: {id: req.params.id, profile: profile.id}},
+  })
+} catch (error) {
+  console.error(error);
+  return res.status(500).json(error)
+}
+})
 
 module.exports = router;

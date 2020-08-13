@@ -13,6 +13,7 @@ const Profile = require('../../models/Profile');
 // add the comment to the post (text and profileid)
 // confirm the comment was added successfully
 // send the comment array back to the requester
+/* NonLocking version
 router.post('/:postID', auth, async (req, res) => {
 try {
     const post = await Post.findById(req.params.id);
@@ -30,5 +31,36 @@ try {
 } catch (error) {
     console.error(error)
     res.status(500).json(error)
+}
+}) */
+
+// Locking version
+router.post(":/postID", auth, async, (req, res) => {
+    try {
+        const profile = await Profile.findOne({user: req.user.id});
+        if(!profile) {
+            return res.status(400).json({msg: "Profile required"});
+        }
+        const comment = {text: req.body.text, profile: profile.id};
+        const post = await Post.findByIdAndUpdate(req.params.id, {$push: {comments: comment}}, {new: true});
+        return res.json(post.comments);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json(error);
+    }
+})
+
+// check logged in
+// get the comment
+// check if user is owner of comment
+// delete the comment
+// return comment array to requester
+
+router.delete("/:postID/:commentID", auth, async (req, res) => {
+try {
+    
+} catch (error) {
+    console.error(error);
+    res.status(500).json(error);
 }
 })
