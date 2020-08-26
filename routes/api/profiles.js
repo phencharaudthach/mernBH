@@ -14,8 +14,8 @@ router.post(
     check('firstName', 'first name is required').not().isEmpty(),
     check('lastName', 'Last name is required').not().isEmpty(),
     check('educationLevel', 'Education level is required').not().isEmpty(),
-    check('social.githubUrl', 'Invalid URL'.optional().isURL()),
-    check('social.twitterUrl', 'Invalid URL'.optional().isURL()),
+    check('social.githubUrl', 'Invalid URL').optional().isURL(),
+    check('social.twitterUrl', 'Invalid URL').optional().isURL(),
   ],
   async (req, res) => {
     console.log(req.body);
@@ -108,15 +108,15 @@ router.get('/', auth, async (req, res) => {
   }
 });
 
-route.put(
+router.put(
   '/:id',
   auth,
   [
     check('firstName', 'first name is required').not().isEmpty(),
     check('lastName', 'Last name is required').not().isEmpty(),
     check('educationLevel', 'Education level is required').not().isEmpty(),
-    check('social.githubUrl', 'Invalid URL'.optional().isURL()),
-    check('social.twitterUrl', 'Invalid URL'.optional().isURL()),
+    check('social.githubUrl', 'Invalid URL').optional().isURL(),
+    check('social.twitterUrl', 'Invalid URL').optional().isURL(),
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -142,7 +142,7 @@ route.put(
   }
 );
 
-route.delete('/', auth, async (req, res) => {
+router.delete('/', auth, async (req, res) => {
   try {
     await Profile.findOneAndRemove({ user: req.user.id });
     res.json({ msg: 'Profile was removed' });
