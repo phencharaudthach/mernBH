@@ -42,7 +42,7 @@
     "graceful-fs": "^4.2.4",
     "has-flag": "^3.0.0",
     "has-yarn": "^2.1.0",
-    "hosted-git-info": "^2.8.8",
+    "hosted-git-info": "^2.8.9",
     "http-cache-semantics": "^4.1.0",
     "http-errors": "^1.7.2",
     "iconv-lite": "^0.4.24",
