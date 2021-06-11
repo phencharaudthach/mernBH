@@ -114,7 +114,7 @@
     "nopt": "^1.0.10",
     "normalize-package-data": "^2.5.0",
     "normalize-path": "^3.0.0",
-    "normalize-url": "^4.5.0",
+    "normalize-url": "^4.5.1",
     "npm-run-path": "^2.0.2",
     "number-is-nan": "^1.0.1",
     "object-assign": "^4.1.1",
