@@ -105,7 +105,7 @@
     "mongodb": "^3.5.8",
     "mongoose": "^5.10.0",
     "mongoose-legacy-pluralize": "^1.0.2",
-    "mpath": "^0.7.0",
+    "mpath": "^0.8.4",
     "mquery": "^3.2.2",
     "ms": "^2.0.0",
     "negotiator": "^0.6.2",
