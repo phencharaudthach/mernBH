@@ -101,7 +101,7 @@
     "mimic-fn": "^2.1.0",
     "mimic-response": "^1.0.1",
     "minimatch": "^3.0.4",
-    "minimist": "^1.2.5",
+    "minimist": "^1.2.6",
     "mongodb": "^3.5.8",
     "mongoose": "^5.10.0",
     "mongoose-legacy-pluralize": "^1.0.2",
